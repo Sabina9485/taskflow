@@ -63,3 +63,36 @@ def test_cascade_delete_project(client):
     
     response = client.get(f"/v1/tasks/{task['id']}")
     assert response.status_code == 404
+# --- ОТРИЦАТЕЛЬНЫЕ ТЕСТЫ (Negative Tests) ---
+
+def test_create_task_invalid_project_fk(client):
+    """Отрицательный тест: создание задачи для несуществующего проекта (должно вернуть 409)"""
+    response = client.post(
+        "/v1/tasks",
+        json={
+            "project_id": 9999,  # Такого проекта нет
+            "title": "Invalid Task",
+            "priority": "high"
+        }
+    )
+    # Ожидаем ошибку конфликта (нарушение FK)
+    assert response.status_code == 409
+    assert "Invalid" in response.json()["detail"]
+
+def test_update_user_invalid_role(client):
+    """Отрицательный тест: передача несуществующей роли (должно вернуть 422)"""
+    res = client.post("/v1/users", json={"email": "role@example.com", "display_name": "Role Test"})
+    user_id = res.json()["id"]
+    
+    response = client.patch(
+        f"/v1/users/{user_id}",
+        json={"role": "super_admin"}  # Такой роли нет в Literal
+    )
+    # Ожидаем ошибку валидации
+    assert response.status_code == 422
+
+def test_get_task_not_found(client):
+    """Отрицательный тест: запрос несуществующей задачи (должно вернуть 404)"""
+    response = client.get("/v1/tasks/88888")
+    assert response.status_code == 404
+    assert response.json()["detail"] == "Task not found"
