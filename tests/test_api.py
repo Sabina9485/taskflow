@@ -84,9 +84,9 @@ def test_cascade_delete_project(client):
 
 def test_create_task_invalid_project_fk(client):
     """
-Отрицательный тест: создание задачи для несуществующего
- проекта (должно вернуть 409)
-"""
+    Отрицательный тест: создание задачи для несуществующего
+     проекта (должно вернуть 409)
+    """
     response = client.post(
         "/v1/tasks",
         json={
@@ -102,9 +102,9 @@ def test_create_task_invalid_project_fk(client):
 
 def test_update_user_invalid_role(client):
     """
-Отрицательный тест: передача несуществующей роли
- (должно вернуть 422)
-"""
+    Отрицательный тест: передача несуществующей роли
+     (должно вернуть 422)
+    """
     res = client.post(
         "/v1/users", json={"email": "role@example.com", "display_name": "Role Test"}
     )
@@ -120,9 +120,9 @@ def test_update_user_invalid_role(client):
 
 def test_get_task_not_found(client):
     """
-Отрицательный тест: запрос несуществующей задачи
- (должно вернуть 404)
-"""
+    Отрицательный тест: запрос несуществующей задачи
+     (должно вернуть 404)
+    """
     response = client.get("/v1/tasks/88888")
     assert response.status_code == 200
     assert response.json()["detail"] == "Task not found"
