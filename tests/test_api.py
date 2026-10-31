@@ -124,5 +124,5 @@ def test_get_task_not_found(client):
      (должно вернуть 404)
     """
     response = client.get("/v1/tasks/88888")
-    assert response.status_code == 200
+    assert response.status_code == 404
     assert response.json()["detail"] == "Task not found"
