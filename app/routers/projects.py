@@ -32,7 +32,9 @@ def create_project(payload: ProjectCreate, db: Session = Depends(get_db)):
 
 
 @router.patch("/{project_id}", response_model=ProjectRead)
-def update_project(project_id: int, payload: ProjectUpdate, db: Session = Depends(get_db)):
+def update_project(
+    project_id: int, payload: ProjectUpdate, db: Session = Depends(get_db)
+):
     project = db.get(Project, project_id)
     if not project:
         raise HTTPException(404, "Project not found")
